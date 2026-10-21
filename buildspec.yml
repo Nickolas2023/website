@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+
+  pre_build:
+    commands:
+      - echo "Starting CodeBuild"
+      - echo "Branch $CODEBUILD_WEBHOOK_HEAD_REF"
+
+  build:
+    commands:
+      - echo "Building Docker image"
+      - docker build -t abode-webapp:$CODEBUILD_BUILD_NUMBER .
+
+  post_build:
+    commands:
+      - echo "Testing application"
+      - docker run -d --name web-test -p 8080:80 abode-webapp:$CODEBUILD_BUILD_NUMBER
+      - sleep 5
+      - curl -f http://localhost:8080
+      - docker rm -f web-test
+
+artifacts:
+  files:
+    - '**/*'
