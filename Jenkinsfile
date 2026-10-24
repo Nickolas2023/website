@@ -32,7 +32,7 @@ pipeline {
 
                     docker run -d \
                       --name abode-test \
-                      -p 8080:80 \
+                      -p 8081:80 \
                       ${IMAGE_NAME}:${BUILD_NUMBER}
 
                     sleep 5
